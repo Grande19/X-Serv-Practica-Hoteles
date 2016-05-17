@@ -76,15 +76,15 @@ class CounterHandler (ContentHandler) :
         return self.hotellist
 
 
-
-theParser = make_parser()
-theHandler = CounterHandler()
-theParser.setContentHandler(theHandler)
+def get():
+        theParser = make_parser()
+        theHandler = CounterHandler()
+        theParser.setContentHandler(theHandler)
 
 # Ready, set, go!
 
-xmlFile = urllib.urlopen('http://www.esmadrid.com/opendata/alojamientos_v1_es.xml')
-theParser.parse(xmlFile)
-#return ('Actualizacion completada')
+    xmlFile = urllib.urlopen('http://www.esmadrid.com/opendata/alojamientos_v1_es.xml')
+    theParser.parse(xmlFile)
+    #return ('Actualizacion completada')
 
 print "Parse complete"
