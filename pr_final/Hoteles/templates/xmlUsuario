@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<serviceList>
+    {% for hotel in h %}
+    <basicData>
+        <name>{{ hotel.hotel.name }}</name>
+    </basicData>
+    <geoData>
+        <address>{{hotel.hotel.address}}</address>
+    </geoData>
+    <multiMedia>
+        <url>{{hotel.hotel.source}}</url>
+    </multiMedia>
+    {% endfor %}
+</serviceList>

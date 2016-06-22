@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Alojamientos</title>
+    <meta charset='utf-8' />
+      {% load staticfiles %}
+      <link rel="stylesheet"  type="text/css" href="{% static 'css/style.css' %}">
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+      <style>
+        body{
+          background-color: {{ color }}
+        }
+        body{
+          font-size: {{size}}
+        }
+
+      </style>
+    </head>
+  </head>
+  <body>
+
+    <div id="header">
+      <img src="https://www.europcar.es/files/live/sites/seo/files/contributed/images/location%20images/corporate%20countries/Spain/Madrid-2-1160x400.jpg"></img>
+    </div>
+
+    </ul>
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="/">Home</a></li>
+      <li><a href="/alojamientos">Alojamientos</a></li>
+      <li><a href="/about">About</a></li>
+
+    </ul>
+    <br></br>
+
+    <form action="" method="POST" >{% csrf_token %}
+        <select id="categoria" name="estrellas">
+          <option value="todos" selected="selected">- select -</option>
+          <option value="Hoteles">Hoteles</option>
+          <option value="Apartahoteles">Apartahoteles</option>
+          <option value="Hostales">Hostales</option>
+          <option value="Albergues">Albergues</option>
+          <option value="Residencias universitarias">Residencias Universitarias</option>
+          <option value="Camping">Camping</option>
+          <option value="Pensiones">Pensiones</option>
+        </select>
+        <select id="estrellas" name="estrellas">
+          <option value="todos" selected="selected">- select -</option>
+          <optgroup label="Estrellas">
+            <option value="1 estrella">1 Estrella</option>
+            <option value="2 estrellas">2 Estrellas</option>
+            <option value="3 estrellas">3 Estrellas</option>
+            <option value="4 estrellas">4 Estrellas</option>
+            <option value="5 estrellas">5 Estrellas</option>
+            <option value="5 estrellas Gran Lujo">5 Estrellas Gran Lujo</option>
+          </optgroup>
+          <optgroup label="Llaves">
+            <option value="1 llave" >1 Llave</option>
+            <option value="2 llaves">2 Llaves</option>
+            <option value="3 llaves">3 Llaves</option>
+            <option value="4 llaves">4 Llaves</option>
+          </optgroup>
+        </select>
+        <input type="submit" value="Filtrar" style="background-color: #FF700;
+          border: 1px solid #FF1493;
+          border-radius: 5px;
+          box-shadow: 0px 0px 0px 1px rgba(255, 115, 100, 0.4) inset, 0px 1px 3px #333;
+          color: #FFF;
+          font: bold 20px/1 "helvetica neue",helvetica,arial,sans-serif;
+          padding: 12px 0px 14px;
+          text-align: center;
+          text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.8);
+          width: 150px;"/>
+      </form></br>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-body scrollable height-25em">
+            <h3>Filtrando por : {{ estrellas }} {{ tipo }}</h3>
+            {% for h in lista %}
+              <li><a href= "{{ h.url }}">{{ h.nombre}}</a></li>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+  </div>
+  </body>
+</html>

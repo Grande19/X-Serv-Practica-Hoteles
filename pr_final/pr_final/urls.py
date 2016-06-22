@@ -15,9 +15,19 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from . import views
+#from . import
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^login/' ,views.login)
+    url(r'^about/$' ,'Hoteles.views.about'),
+    url(r'^alojamientos/$' , 'Hoteles.views.todos'),
+    url(r'^$' , 'Hoteles.views.principal'),
+    url(r'^login', 'django.contrib.auth.views.login'),
+    url(r'^logout', 'django.contrib.auth.views.logout', {'next_page': '/'}),
+    url(r'^register/$', 'Hoteles.views.new_user'),
+    #url(r'^usuario/$','Hoteles.views.usuario')
+    url (r'^alojamientos/(\d+)$' , 'Hoteles.views.alojamientoid'),
+    #url(r'^usuario/$' , 'Hoteles.views.usuario')
+    #url(r'^(.*)$','Hoteles.views.paginaUsuario')
+
 ]

@@ -1,90 +1,100 @@
+
 from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 import sys
-import string
-import urllib , urllib2
-import os.path
+import urllib
+from  models import Hotel , Imagen , Comentario
 
-class CounterHandler (ContentHandler) :
 
-    def __init__(self):
-        self.inItem = False
-        self.inContent = False
+class myContentHandler(ContentHandler):
+
+    def __init__ (self):
+        self.record=None;
+
         self.theContent = ""
-        self.hotellist = []
-        self.list = {}
-        self.cont = 1
+        self.titulo=""
+        self.url=""
+        self.dir=""
+        self.img=""
+        self.tipo=""
+        self.body=""
+        self.recimg=None
+        self.is_star=False;
+        self.is_img=False;
+        self.is_cat =False;
+    def startElement (self, name, attrs):
 
-    def startElement (self , name , attrs):
-        if name == 'name': #empieza cuando encuentra la etiqueta name
-            self.inItem = True
-            self.inContent = True
-        if name == 'body' :
-            self.inItem = True
-            self.inContent = True
-        if name == 'web' :
-            self.inItem = True
-            self.inContent = True
-        if name == 'address' :
-            self.inItem = True
-            self.inContent = True
-        if name == 'media' and attrs["type"] == "image" :
-            self.inItem = True
-        elif self.inItem:
-            if name == "url" and self.cont<6 : #unicamente mostrar 5 imagenes
-                self.cont += self.cont + 1
-                self.inContent = True
+        self.theContent=name
+        if name =='basicData':
+            self.record = Hotel(nombre="", url="",direccion="", descripcion="",tipo="")
 
-        if name == 'item' and attrs["name"] == "Subcategoria":
-            self.inItem = True
-            self.inContent = True
+        if name =="item":
+            if attrs['name']== "SubCategoria":
+                self.is_star=True;
+        if name =="item":
+            if attrs['name']== "Categoria":
+                self.is_cat=True;
+        if name =='media':
+            if attrs['type']== "image":
+                self.is_img=True
+                self.recimg=Image(idHotel=0,img=self.record,url_I="")
 
-    def endElement(self , name) :
-        if name == "name":
-            self.list[name] = self.theContent #aniadimos el contenido de dentro de la etiqueta al diccionario de hoteles
-            self.inItem = False
-            self.inContent = False
-        if name == "body" :
-            self.list[name] = self.theContent
-            self.inItem = False
-            self.inContent = False
-        if name == "web" :
-            self.list[name] = self.theContent
-            self.inItem = False
-            self.inContent = False
-        if name == "address" :
-            self.list[name] = self.theContent
-            self.inItem = False
-            self.inContent = False
-        if name == "item" :
-            self.list[name] = self.theContent
-            self.hotellist.append(self.list) #se aniade a la lista de hoteles
-            self.inItem = False
-            self.inContent = False
-        if name == "media":
-            self.inItem = False
-        elif self.inItem :
-            if name == "url" :
-                self.list[name] = self.theContent
-                self.inContent = False
+    def endElement (self, name):
+            if self.theContent=='body': #bien
+                self.record.descripcion=self.body;
+                self.record.save()
 
+            if self.theContent=='item' and self.is_star:
+                self.record.estrellas=self.tipo
+                self.record.save();
+                self.is_star=False;
+
+            if self.theContent=='item' and self.is_cat:
+
+                self.record.tipo=self.tipo
+                self.record.save();
+                self.is_cat=False;
+            if self.theContent == 'url' and self.is_img:
+                self.record.urlimagen=self.img
+                self.recimg.img=self.record
+                self.recimg.url_I=self.img;
+                self.recimg.idHotel=self.record.id;
+                self.record.save()
+                self.recimg.save()
+                print self.recimg.img.id
+                print self.record.id
+                print self.recimg.url_I
+                self.is_img=False
+            if self.theContent == 'title':
+                self.record.nombre=self.titulo;
+                self.record.save()
+                #print self.titulo
+            elif self.theContent == 'web':
+                self.record.url=self.url
+                self.record.save()
+                #print self.url
+            elif self.theContent == 'address':
+                self.record.direccion=self.dir
+                self.record.save()
+
+                #print self.theContent
+            self.theContent=""
+
+            #record.save()
     def characters (self, chars):
-        if self.inContent:
-            self.theContent = chars
+        if self.theContent == 'body':
+            self.body=chars
+            print self.body
+        if self.theContent == 'title':
+            self.titulo=chars
 
-    def dameLista(self):
-        return self.hotellist
+        elif self.theContent == 'web':
+            self.url=chars
 
+        elif self.theContent == 'address':
+            self.dir=chars
 
-def get():
-        theParser = make_parser()
-        theHandler = CounterHandler()
-        theParser.setContentHandler(theHandler)
-
-# Ready, set, go!
-
-    xmlFile = urllib.urlopen('http://www.esmadrid.com/opendata/alojamientos_v1_es.xml')
-    theParser.parse(xmlFile)
-    #return ('Actualizacion completada')
-
-print "Parse complete"
+        elif self.theContent == 'url':
+            self.img=chars
+        elif self.theContent == 'item':
+            self.tipo=chars

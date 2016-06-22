@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>About Madrid</title>
+    <meta charset='utf-8' />
+      {% load staticfiles %}
+      <link rel="stylesheet"  type="text/css" href="{% static 'css/style.css' %}">
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+      <style>
+        body{
+          background-color: {{ color }}
+        }
+        body{
+          font-size: {{size}}
+        }
+
+      </style>
+    </head>
+  </head>
+  <body>
+    <div id="header">
+      <img src="https://www.europcar.es/files/live/sites/seo/files/contributed/images/location%20images/corporate%20countries/Spain/Madrid-2-1160x400.jpg"></img>
+    </div>
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="/">Principal</a></li>
+      <li><a href="/alojamientos">Alojamientos</a></li>
+      <li><a href="/about">About</a></li>
+
+    </ul>
+    <br></br>
+      <div>
+        {% csrf_token %}
+        <label for="username">Username :</label><input type="text" name="username" value="" />
+        <label for="password">Password :</label><input type="password" name="password" value=""  />
+        <p><input type="submit" value="Login"></p>
+        <p><<a href="/register">Registrate</a></p>
+      </div>
+        <div id="cuerpo">
+            <div id='izq'>
+                <div id="alojamientos">
+                    <h2>
+                        {{titulo|safe}}
+                    </h2>
+                    {{contenido|safe}}
+
+                    <h2>
+                        {{personales|safe}}
+                    </h2>
+                    {{cuerpo_personales|safe}}
+                </div>
+            </div>
+
+                <div id="filtro">
+                    {{busqueda|safe}}
+                </div>
+                <div id="actualizar">
+                    {{actualizar|safe}}
+                </div>
+
+                 <br><div id="rss">
+                    {{rss|safe}}
+                </div></br>
+            </div>
+        </div>
+        <div id="pie">
+            {{pie|safe}}
+        </div>
+        <footer> <p>Copyright . Esta aplicacion utiliza datos del portal de datos abierto de la ciudad de Madrid <a href="http://www.esmadrid.com/opendata/alojamientos_v1_es.xml"> Datos XML</a></p> </footer>
+        <footer> <p><a href="http://bit.ly/1T24Zsq">Descripción de los datos</a></p></footer>
+    </body>
+</html>

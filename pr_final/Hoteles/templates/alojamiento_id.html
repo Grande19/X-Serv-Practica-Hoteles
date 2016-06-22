@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    {% load staticfiles %}
+    <link rel="stylesheet"  type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div id="header">
+      <img src="https://www.europcar.es/files/live/sites/seo/files/contributed/images/location%20images/corporate%20countries/Spain/Madrid-2-1160x400.jpg"></img>
+    </div>
+    <div class="container-fluid">
+     </div>
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="/alojamientos">Alojamientos</a></li>
+        <li><a href="/about">About</a></li>
+
+      </ul>
+      <div>
+          {% if user.is_authenticated %}
+            <h3> You are inside {{ user }}</h3>
+            <h3> Write a comment ...</h3>
+            <form action="" method="post" accept-charset="utf-8">
+              {% csrf_token %}
+            <textarea name="comentarios" rows="10" cols="40">Escribe aquí tus comentarios</textarea>
+            <p><input type="submit" value="Send →"></p>
+          </form>
+          <a href="{{ pathi }}"> XML Inglés </a>
+          <a href="{{ pathf }}"+"/xmlfrances"> XML Francés </a>
+        {% endif %}
+    </div>
+
+    <div class"col-md-9 well well-sm">
+      <h3> {{ name }}</h3>
+      <li><a href= "{{ url }}">{{name}}</a></li>
+      <li>{{ address }}</li>
+      <li> {{type}}</li>
+      <li> {{stars}}</li>
+  </div>
+      <div class="row">
+          {% for h in lista %}
+
+              <img class="img-thumbnail thumbnail col-md-3" src="{{ h.url_I}}"></img>
+
+        {% endfor %}
+      </div>
+    <div class="col-md-12">
+      <li>{{ body |safe }}</li>
+    </div>
+  <div class="row">
+    <div class="col-md-12 well well-sm panel panel-default">
+      <div class="panel-body">
+        <h3> Comentarios: </h3>
+          {% for h in comentarios %}
+            <p> <li>{{ h.contenido }}</li> </p>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+  </body>
+</html>

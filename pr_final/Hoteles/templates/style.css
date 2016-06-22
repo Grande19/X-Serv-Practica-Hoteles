@@ -1,0 +1,108 @@
+body{
+    background:url(imagenes/fondo.png);
+    background-repeat: repeat-x repeat-y;
+}
+
+#dcha span{
+    color:red;
+}
+
+#izq span{
+    font-weight:bold;
+    color:black;
+}
+
+#banner{
+    height:275px;
+    background:url('{{banner}}') top center;
+    background-repeat:no-repeat;
+}
+
+#menu{
+    margin:0 auto;
+    margin-top:10px;
+    width:900px;
+    height:50px;
+    background-color:{{menu}}
+}
+
+#menu div{
+    width:100px;
+    font-size:30px;
+    height:49px;
+    list-style-type: none;
+}
+
+#menu .todas{
+    float:left;
+}
+
+#menu .ayuda{
+    float:left;
+    margin-left:30px;
+}
+
+#menu .inicio{
+    float:right;
+
+}
+
+#menu div a {
+    color: black;
+    text-decoration: none;
+}
+#menu div a:hover{
+    background-color: black;
+    color: red;
+}
+
+#izq{
+    width:560px;
+    float:left;
+}
+
+#dcha{
+    width:310px;
+    float:right;
+}
+#cuerpo{
+    margin:0 auto;
+    margin-top:5px;
+    width:900px;
+}
+
+#cuerpo #actividades{
+    width:550px;
+}
+
+#cuerpo #login{
+    width:300px;
+    background-color:{{login}};
+}
+
+#cuerpo #filtro{
+    width:300px;
+    margin-top:20px;
+}
+
+#cuerpo #actualizar{
+    width:300px;
+    margin-top:20px;
+}
+
+#pie{
+
+    width:900px;
+    position: relative;
+    margin:0 auto;
+    margin-top: -50px;
+    clear: both;
+    background: {{pie}};
+    text-align: right;
+    color: black;
+}
+
+#destacado{
+    width: 20px;
+    height:20px;
+}
