@@ -1,7 +1,7 @@
 
 
 from django.db import models
-from django.utils import timezone
+
 # Create your models here.
 class Hotel (models.Model):
     nombre = models.CharField(max_length = 32)
@@ -18,12 +18,12 @@ class Comentario(models.Model) :
     contenido = models.TextField(default = "")
     hotel = models.ForeignKey(Hotel)
     #idHotel = models.IntegerField(default=0
-    #fecha = models.DateTimeField(auto_now=True)
+    fecha = models.DateTimeField(auto_now=True)
 
 class HotelSelect (models.Model):
     idHotel = models.IntegerField(default="")
     usuario = models.CharField(max_length=32)
-    #fecha = models.DateTimeField(auto_now=True)
+    fecha = models.DateTimeField(auto_now=True)
 
 class Imagen(models.Model) :
     url_I = models.URLField(default="")

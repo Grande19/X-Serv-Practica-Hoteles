@@ -19,7 +19,7 @@ from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django views.decorators.csrf import csrf_exempt
+
 
 # Create your views here.
 
@@ -48,7 +48,7 @@ def about(request):
 
     cuerpo += u'<span>Interfaz pública: para todos los usuarios</span>'
     cuerpo += '<br><ul style="list-style-type: square">'
-    cuerpo += u'<li>Página principal: muestra los 10 alojamientos con más comentarios y  un listado con las paginas personales.</li>'
+    cuerpo += u'<li>Página principal: muestra los 10 alojamientos con más Comentarios y  un listado con las paginas personales.</li>'
     cuerpo += u'<li>Pagina personal de usuario: muestra los alojamientos seleccionadas por el usuario.</li>'
     cuerpo += '<li>Alojamientos: muestra todas los alojamientos disponibles. Permite filtrarlas por dos campos.</li>'
     cuerpo += u'<li>Cada alojamiento tiene su página con información más detallada.</li></ul>'
@@ -99,7 +99,7 @@ def principal(request):
     respuesta=""
     salida=""
     lista=Hotel.objects.all()
-    listauser=Usuarios.objects.all()
+    listauser=""
     #User es el admin el creo por defecto que no guardo en models
     print listauser
 
@@ -164,26 +164,26 @@ def alojamientoid (request , id):
     #poner los idiomas
     lista = Hotel.objects.get(id=id)
     imagelist = Imagen.objects.filter(idHotel = lista.id)
-    #listausu = Usuarios.objects.all()
-    comment = ""
+    listausu = ""
+    Comentario = ""
 
     if request.method == 'POST' :
-        value = request.POST.get("comentario","")
+        value = request.POST.get("Comentario","")
         if value!="":
-            comentario = Comentario (idHotel = lista.id , contenido = value , hotel = lista.nombre )
-            comentario.save()
-            print comentario.contenido
+            Comentario = Comentario (idHotel = lista.id , contenido = value , hotel = lista.nombre )
+            Comentario.save()
+            print Comentario.contenido
         else :
-            comentario = Comentario.objects.filter(idHotel = lista.id)
-            print comentario
-    listacomment =Comentario.objects.all()
+            Comentario = Comentario.objects.filter(idHotel = lista.id)
+            print Comentario
+    listaComentario =""
     context = {'lista':imagelist[0:5],'h':lista,'condicion':"",'url':lista.url,'name':lista.nombre, 'body':lista.descripcion,
-                'address':lista.direccion,'comentarios':listacomment,'type':lista.tipo,'stars':lista.estrellas,
+                'address':lista.direccion,'Comentarios':listaComentario,'type':lista.tipo,'stars':lista.estrellas,
                 'user':request.user.username,'listausers':listausu}
     #if request.user.is_authenticated():
     #    us=PagUser.objects.get(user=request.user.username)
     #    context = {'lista':listimages[0:5],'h':hoteles,'condicion':"",'url':lista.url,'name':lista.name,
-    #                'address':lista.address,'comentarios':listcoms,'type':lista.tipo,'stars':lista.stars, 'body':lista.body,
+    #                'address':lista.address,'Comentarios':listcoms,'type':lista.tipo,'stars':lista.stars, 'body':lista.body,
     #                'color':us.color,'size':us.size,'user':request.user.username,'listausers':listauser}
 
     return render_to_response('alojamiento_id.html', context,context_instance = RequestContext(request))

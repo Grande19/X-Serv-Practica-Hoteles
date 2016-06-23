@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from models import Hotel, HotelSelect, Comentario, StyleCSS
+from models import Hotel, Comentario, StyleCSS , HotelSelect
 
 admin.site.register(Hotel)
 admin.site.register(HotelSelect)
