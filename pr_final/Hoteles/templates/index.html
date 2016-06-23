@@ -33,16 +33,16 @@
       <div class="panel panel-default"  id = "login">
         <div class="panel-body" >
           {% if nombre %}
-            <h3> You're inside  {{ nombre }}</h3>
+            <h3> You're inside  {{ Usuarios.nombre }}</h3>
             <a href='/'>Logout</a><br>
             {% else %}
             <h3>Login</h3>
-            <form action="/login" method="post" accept-charset="utf-8">
+            <form action="/login" method="POST" accept-charset="utf-8">
               {% csrf_token %}
               <label for="username">Username</label><input type="text" name="username" value="" />
               <label for="password">Password</label><input type="password" name="password" value=""  />
               <p><input type="submit" value="Login"></p>
-              <p><<a href="/register">Registrate</a></p>
+              <p><a href="/register">Registrate</a></p>
             </form>
             {% endif%}
           </div>

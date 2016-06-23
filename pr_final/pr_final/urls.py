@@ -30,4 +30,5 @@ urlpatterns = [
     #url(r'^usuario/$' , 'Hoteles.views.usuario')
     #url(r'^(.*)$','Hoteles.views.paginaUsuario')
 
+
 ]
