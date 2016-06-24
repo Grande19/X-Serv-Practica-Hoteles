@@ -37,12 +37,23 @@
             <a href='/'>Logout</a><br>
             {% else %}
             <h3>Login</h3>
-            <form action="/login" method="post" accept-charset="utf-8">
-              {% csrf_token %}
-              <label for="username">Username</label><input type="text" name="username" value="" />
-              <label for="password">Password</label><input type="password" name="password" value=""  />
-              <p><input type="submit" value="Login"></p>
-              <p><<a href="/register">Registrate</a></p>
+
+            <form method="post" action="/login">
+            {% csrf_token %}
+            <p>
+            Accede a tu cuenta!
+              <table>
+                <tr>
+                  <td>Usuario:</td>
+                  <td>{{ form.username }}</td>
+                </tr>
+                  <tr>
+                    <td>Contraseña:</td>
+                    <td>{{ form.password }}</td>
+                  </tr>
+                </table>
+                <input type="submit" value="Acceder" />
+              </p>
             </form>
             {% endif%}
           </div>

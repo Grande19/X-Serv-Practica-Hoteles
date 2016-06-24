@@ -14,7 +14,7 @@
     <div class="container-fluid">
      </div>
       <ul class="nav nav-tabs">
-        <li class="active"><a href="/">Home</a></li>
+        <li class="active"><a href="/">Princial</a></li>
         <li><a href="/alojamientos">Alojamientos</a></li>
         <li><a href="/about">About</a></li>
 
@@ -55,7 +55,8 @@
       <div class="panel-body">
         <h3> Comentarios: </h3>
           {% for h in comentarios %}
-            <p> <li>{{ h.contenido }}</li> </p>
+            <p>Introducido por {{h.usuario.nombre}} el día {{h.date}} -> {{ h.contenido }}</li> </p>
+
           {% endfor %}
       </div>
     </div>

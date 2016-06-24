@@ -193,7 +193,7 @@ def alojamientoid (request , id):
     #                'address':lista.address,'comentarios':listcoms,'type':lista.tipo,'stars':lista.stars, 'body':lista.body,
     #                'color':us.color,'size':us.size,'user':request.user.username,'listausers':listauser}
 
-    return render_to_response('aalojamiento_id.html', context,context_instance = RequestContext(request))
+    return render_to_response('alojamiento_id.html', context,context_instance = RequestContext(request))
     #return HttpResponse(imagelist.idHotel)
 
 

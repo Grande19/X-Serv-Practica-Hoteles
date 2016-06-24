@@ -16,12 +16,15 @@ class Hotel (models.Model):
 class Usuarios (models.Model) :
     nombre = models.CharField(max_length = 32)
     hoteles = models.ManyToManyField(Hotel)
-    #date = models.DateField ( auto_now = True , default = "now")
+    date = models.DateField ( null=True , blank= True)
 
 class Comentario(models.Model) :
     contenido = models.TextField(default = "")
     hotel = models.ForeignKey(Hotel)
     idHotel = models.IntegerField(default=0)
+    date = models.DateField ( null=True , blank= True)
+    usuario = models.ForeignKey(Usuarios)
+
 
 class Imagen(models.Model) :
     url_I = models.URLField(default="")
