@@ -32,49 +32,46 @@
       <div class="col-md-6">
       <div class="panel panel-default"  id = "login">
         <div class="panel-body" >
-          {% if nombre %}
-            <h3> You're inside  {{ nombre }}</h3>
-            <a href='/'>Logout</a><br>
+          {% if autenticado %}
+            <h3> Bienvenido  {{ user }}</h3>
+            <a href='/accounts/logout'>Logout</a><br>
             {% else %}
-            <h3>Login</h3>
 
-            <form method="post" action="/login">
+
+            <form method="post" action="{% url 'django.contrib.auth.views.login' %}?next={{ request.GET.next }}">
             {% csrf_token %}
+
             <p>
-            Accede a tu cuenta!
+              <label for="username"> Nombre de usario : </label>
+              <input type="text" name = "username" value="" id="username">
+              <br></br>
+              <label for="password"> Password : </label>
+              <input type="password" name="password" value="" id="password">
+
+              <input type="submit" value="login" />
               <table>
-                <tr>
-                  <td>Usuario:</td>
-                  <td>{{ form.username }}</td>
-                </tr>
-                  <tr>
-                    <td>Contraseña:</td>
-                    <td>{{ form.password }}</td>
-                  </tr>
-                </table>
-                <input type="submit" value="Acceder" />
+
+
               </p>
             </form>
+
+
             {% endif%}
           </div>
         </div>
       </div>
-  <div class= "panel panel-default" id= 'pagusers'>
-    <div class="panel-body" >
-      <div class="col-md-6">
+
       <ul>
         {% for h in listausers %}
           {% if h.titulo_pagina == condicion %}
-            <li align=right><a href= "{{ h.nombre }}">Pagina de {{ h.nombre }}</a></li>
+            <li align=right><a href= "{{ h.user }}">Pagina de {{ h.user }}</a></li>
           {% else %}
-            <li><a href= "{{ h.hoteles }}">{{h.nombre}}</a></li>
-        {% endif %}
+          <li ><a href= "{{ h.user }}">Pagina de {{ h.username }}</a></li>
+          {% endif %}
       {% endfor %}
     </ul>
-  </div>
-  </div>
-</div>
-</div>
+
+
   <div clas="row">
   <div class="well well-sm panel panel-default col-md-12" id="listhotels">
     <div class="panel-body">

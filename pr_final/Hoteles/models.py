@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Hotel (models.Model):
@@ -13,17 +14,14 @@ class Hotel (models.Model):
     tipo = models.CharField(max_length = 32,default="")
     urlimagen = models.URLField()
 
-class Usuarios (models.Model) :
-    nombre = models.CharField(max_length = 32)
-    hoteles = models.ManyToManyField(Hotel)
-    date = models.DateField ( null=True , blank= True)
+
 
 class Comentario(models.Model) :
     contenido = models.TextField(default = "")
     hotel = models.ForeignKey(Hotel)
     idHotel = models.IntegerField(default=0)
     date = models.DateField ( null=True , blank= True)
-    usuario = models.ForeignKey(Usuarios)
+    usuario = models.ForeignKey(User)
 
 
 class Imagen(models.Model) :
@@ -32,7 +30,7 @@ class Imagen(models.Model) :
     idHotel = models.IntegerField(default=0)
 
 class StyleCSS (models.Model) :
-    usuario = models.ForeignKey(Usuarios)
+    usuario = models.ForeignKey(User)
     color = models.CharField(max_length=300,default="")
     size=models.CharField(max_length=200,default="")
     titulo_pagina = models.CharField(max_length = 32,default = "")

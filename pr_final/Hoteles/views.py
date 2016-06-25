@@ -3,10 +3,10 @@
 
 from django.shortcuts import render
 
-from models import Hotel , Usuarios , StyleCSS , Comentario , Imagen
+from models import Hotel , StyleCSS , Comentario , Imagen
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from xml_parser import myContentHandler
-#from xml_parser import get
+#from django.core.context_procesors import csrf
 import datetime
 from django.contrib.auth.models import User
 from django.contrib import auth
@@ -19,129 +19,16 @@ from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 
-def login(): #registro de usuario
-
-    user = '<form action="" method="POST">'
-    user += 'Nombre de usuario<br><input type="text" name="Usuario"><br>'
-    user += 'Password<br><input type="password" name="Password">'
-    user += '<br><input type="submit" value="Entrar"> o '
-    user += '<a href="/register">Registrate</a>'
-    user += '</form>'
-    return user
-
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect("/")
+def login(request):
 
 
-def about(request):
-    cuerpo = ""
-    log = ""
-    titulo = "About this page"
-    inicio = '<a href = "/">Principal</a>'
+    return render_to_response('login.html',RequestContext(request,{}))
 
-
-    cuerpo = ""
-    log = ""
-    titulo = u"About. Información Alojamientos de Madrid"
-    inicio = '<a href="/">Inicio</a>'
-    error = ''
-    if request.user.is_authenticated():
-        log += 'Hola ' + request.user.username
-        log += '<br><a href="/logout">Salir</a>'
-    else:
-        log += login()
-
-
-    cuerpo += u'<span>Interfaz pública: para todos los usuarios</span>'
-    cuerpo += '<br><ul style="list-style-type: square">'
-    cuerpo += u'<li>Página principal: muestra los 10 alojamientos con más comentarios y  un listado con las paginas personales.</li>'
-    cuerpo += u'<li>Pagina personal de usuario: muestra los alojamientos seleccionadas por el usuario.</li>'
-    cuerpo += '<li>Alojamientos: muestra todas los alojamientos disponibles. Permite filtrarlas por dos campos.</li>'
-    cuerpo += u'<li>Cada alojamiento tiene su página con información más detallada.</li></ul>'
-    cuerpo += u'<li>Además cada alojamiento tiene un enlace a su página correspondiente del Ayuntamiento de Madrid </li></ul>'
-    cuerpo += '<span>Interfaz privada: solo para usuarios registrados </span>'
-    #cuerpo += u'<li>g</li>
-    cuerpo += u'Permite todas las funcionalidades de Interfaz pública y :'
-    cuerpo += '<ul style="list-style-type: square">'
-    cuerpo += u'<li>Seleccionar actividades en la pagina "todas" para su página personal.</li>'
-    cuerpo += u'<li>Permite modificar varios aspectos de la página web, como el estilo o el título de su página personal.</li></ul>'
-
-    #Logearse en ayuda
-
-    #plantilla = get_template('template.html')
-    c = Context({'loggin': log, 'contenido': cuerpo, 'titulo': titulo, 'inicio': inicio})
-    #renderizado = plantilla.render(c)
-    #return HttpResponse(renderizado)
-    return render_to_response('template.html', c , context_instance = RequestContext(request))
-
-
-
-def todos(request):
-    lista = Hotel.objects.all()
-    listausu = Usuarios.objects.all()
-    filtro_estrellas = ""
-    filtro_subcategoria = ""
-    if request.method == 'POST':
-        filtro_estrellas = request.POST.get('estrellas',"")
-        print filtro_estrellas
-        filtro_subcategoria = request.POST.get('ftipo',"")
-        print filtro_subcategoria
-        if filtro_estrellas != "" and filtro_subcategoria != "" :
-            lista = Hotel.objects.filter(tipo = filtro_estrellas,estrellas = filtro_estrellas)
-        elif filtro_estrellas == "" and filtro_subcategoria != "":
-            lista=Hotel.objects.filter(tipo=filtro_subcategoria)
-        elif filtro_subcategoria == "" and filtro_estrellas != "":
-            lista=Hotel.objects.filter(estrellas=filtro_estrellas)
-    #usuarioStyle = User.objects.get(user = request.User.nombre)
-    #context = {'lista' : lista , 'color': usuarioStyle.color , 'size':usuarioStyle.size , 'estrellas':filtro_estrellas , 'Subcategoria' : filtro_subcategoria}
-    #return render_to_response('aloj.html',context,context_instance = RequestContext(request))
-    c = Context ({'lista' : lista , 'estrellas':filtro_estrellas , 'subcategoria':filtro_subcategoria})
-    return render_to_response('todos_alojamientos.html', c , context_instance = RequestContext(request))
-
-
-
-def principal(request):
-
-    respuesta=""
-    salida=""
-    lista=Hotel.objects.all()
-    listauser=Usuarios.objects.all()
-    #User es el admin el creo por defecto que no guardo en models
-    print listauser
-
-    if len(lista) == 0:
-        print("Parsing....")
-        theParser = make_parser()
-        theHandler = myContentHandler()
-        theParser.setContentHandler(theHandler)
-        fil = urllib2.urlopen( 'http://www.esmadrid.com/opendata/alojamientos_v1_es.xml')
-        theParser.parse(fil)
-
-
-    template = get_template("index.html")
-    context = {'lista':lista[0:10],'user':request.user.username,'listausers':listauser,'condicion':""}
-    if request.user.is_authenticated():
-            try:
-                us=User.objects.get(username=request.user.username)
-            except User.DoesNotExist:
-                context = {'lista':lista[0:10],'user':request.user.username}
-                return render_to_response('index.html', context, context_instance = RequestContext(request))
-
-            context = {'lista':lista[0:10],'user':request.user.username,'listausers':listauser,'condicion':""}
-    return render_to_response('index.html', context, context_instance = RequestContext(request))
-
-
-def new_user (request):
-    log = '<form action = "" method ="POST">'
-    log += 'Nombre de usuario<br><input type = "text" name = "Usuario"><br>'
-    log += 'Password<br><input type="password" name="Password">'
-    log += '<br><input type="submit" value="Registrarme">'
-    log += '</form>'
-    principal = '<a href="/">Princial</a>'
+def auth_view(request):
     if request.method == 'POST':
         username = request.POST['Usuario']
         password = request.POST['Password']
@@ -165,15 +52,148 @@ def new_user (request):
         return HttpResponseRedirect('/')
 
     #plantilla = get_template('template2.html')
-    c = Context({'loggin': log})
+#    c = Context({'loggin': log})
     #renderizado = plantilla.render(c)
     #return HttpResponse(renderizado)
-    return render_to_response('index.html', c, context_instance = RequestContext(request))
+
+    listauser = User.objects.all()
+    username = request.POST.get('username','')
+    password = request.POST.get('password','')
+    c = Context({'nombre':request.user.username})
+    return render_to_response('index.html', RequestContext(request),c)
+    user = auth.authenticate(username = username , password = password)
+
+    if user is not None :
+        auth.login(request,user)
+        return HttpResponseRedirect('/accounts/loggedin')
+    else:
+        return HttpResponseRedirect('/accounts/invalid')
+
+def loggedin (request):
+    return render_to_response('loggedin.html',{'full_name':request.user.username})
+
+def invalid_login (request):
+    return render_to_response('invalid_login.html')
+
+def logout(request):
+    auth.logout(request)
+    return render_to_response('logout.html')
+
+
+
+
+
+
+def about(request):
+    cuerpo = ""
+    log = ""
+    titulo = "About this page"
+    inicio = '<a href = "/">Principal</a>'
+
+
+    cuerpo = ""
+    log = ""
+    titulo = u"About. Información Alojamientos de Madrid"
+    inicio = '<a href="/">Inicio</a>'
+    error = ''
+    if request.user.is_authenticated():
+        log += 'Hola ' + request.user.username
+        log += '<br><a href="/logout">Salir</a>'
+    else:
+        log += login()
+
+
+    cuerpo += u'<span>Interfaz pública: para todos los User</span>'
+    cuerpo += '<br><ul style="list-style-type: square">'
+    cuerpo += u'<li>Página principal: muestra los 10 alojamientos con más comentarios y  un listado con las paginas personales.</li>'
+    cuerpo += u'<li>Pagina personal de usuario: muestra los alojamientos seleccionadas por el usuario.</li>'
+    cuerpo += '<li>Alojamientos: muestra todas los alojamientos disponibles. Permite filtrarlas por dos campos.</li>'
+    cuerpo += u'<li>Cada alojamiento tiene su página con información más detallada.</li></ul>'
+    cuerpo += u'<li>Además cada alojamiento tiene un enlace a su página correspondiente del Ayuntamiento de Madrid </li></ul>'
+    cuerpo += '<span>Interfaz privada: solo para User registrados </span>'
+    #cuerpo += u'<li>g</li>
+    cuerpo += u'Permite todas las funcionalidades de Interfaz pública y :'
+    cuerpo += '<ul style="list-style-type: square">'
+    cuerpo += u'<li>Seleccionar actividades en la pagina "todas" para su página personal.</li>'
+    cuerpo += u'<li>Permite modificar varios aspectos de la página web, como el estilo o el título de su página personal.</li></ul>'
+
+    #Logearse en ayuda
+
+    #plantilla = get_template('template.html')
+    c = Context({'loggin': log, 'contenido': cuerpo, 'titulo': titulo, 'inicio': inicio})
+    #renderizado = plantilla.render(c)
+    #return HttpResponse(renderizado)
+    return render_to_response('template.html', c , context_instance = RequestContext(request))
+
+
+
+def todos(request):
+    lista = Hotel.objects.all()
+    listausu = User.objects.all()
+    filtro_estrellas = ""
+    filtro_subcategoria = ""
+    if request.method == 'POST':
+        filtro_estrellas = request.POST.get('estrellas',"")
+        print filtro_estrellas
+        filtro_subcategoria = request.POST.get('ftipo',"")
+        print filtro_subcategoria
+        if filtro_estrellas != "" and filtro_subcategoria != "" :
+            lista = Hotel.objects.filter(tipo = filtro_estrellas,estrellas = filtro_estrellas)
+        elif filtro_estrellas == "" and filtro_subcategoria != "":
+            lista=Hotel.objects.filter(tipo=filtro_subcategoria)
+        elif filtro_subcategoria == "" and filtro_estrellas != "":
+            lista=Hotel.objects.filter(estrellas=filtro_estrellas)
+    #Usertyle = User.objects.get(user = request.User.nombre)
+    #context = {'lista' : lista , 'color': Usertyle.color , 'size':Usertyle.size , 'estrellas':filtro_estrellas , 'Subcategoria' : filtro_subcategoria}
+    #return render_to_response('aloj.html',context,context_instance = RequestContext(request))
+    c = Context ({'lista' : lista , 'estrellas':filtro_estrellas , 'subcategoria':filtro_subcategoria})
+    return render_to_response('todos_alojamientos.html', c , context_instance = RequestContext(request))
+
+
+
+def principal(request):
+
+    respuesta=""
+    salida=""
+    lista=Hotel.objects.all()
+    listauser=User.objects.all()
+    #User es el admin el creo por defecto que no guardo en models
+    print listauser
+
+    if len(lista) == 0:
+        print("Parsing....")
+        theParser = make_parser()
+        theHandler = myContentHandler()
+        theParser.setContentHandler(theHandler)
+        fil = urllib2.urlopen( 'http://www.esmadrid.com/opendata/alojamientos_v1_es.xml')
+        theParser.parse(fil)
+
+    #autenticado = request.user.is_authenticated()
+    #if autenticado == True:
+    #    user = User.objects.get(nombre=request.user.username)
+    #else
+    #    return render_to_response('invalid_login.html')
+    template = get_template("index.html")
+    context = {'lista':lista[0:10],'user':request.user.username,'listausers':listauser,'condicion':""}
+    autenticado = request.user.is_authenticated
+    if autenticado:
+            try:
+                usuario=User.objects.get(username=request.user.username)
+            except User.DoesNotExist:
+                context = {'lista':lista[0:10],'user':request.user.username}
+                return render_to_response('index.html', context, context_instance = RequestContext(request))
+
+    listausers = User.objects.all()
+    context = {'autenticado': request.user.is_authenticated, 'lista':lista[0:10],'user':request.user.username,'listausers':listauser,'condicion':" "}
+    return render_to_response('index.html', context, RequestContext(request))
+
+
+
 
 def alojamientoid (request , id):
     lista = Hotel.objects.get(id=id)
     imagelist = Imagen.objects.filter(idHotel = lista.id)
-    listausu = Usuarios.objects.all()
+    listausu = User.objects.all()
 
     if request.method == 'POST' :
         value = request.POST.get("comentario","")
@@ -202,7 +222,7 @@ def alojamientoid (request , id):
 
 def pagina_usuario (request , recurso) :
     cuerpo = ""
-    usuario = Usuarios.objects.get(nombre=recurso)
+    usuario = User.objects.get(nombre=recurso)
     titulo = usuario.titulo_pagina
     log = ""
     error = ""
@@ -251,7 +271,7 @@ def paginaUsuario(request , usuario) :
         titulo = ""
         u = usuario
     except StyleCSS.DoesNotExist :
-        usuario = Usuarios.objects.get(usuario = usuario)
+        usuario = User.objects.get(usuario = usuario)
         u = usuario.usuario
         titulo = ""
     try:
