@@ -33,5 +33,7 @@ urlpatterns = [
     url (r'^accounts/invalid/$','Hoteles.views.invalid_login'),
     #url (r'^accounts/register_success/$','Hoteles.views.register_success'),
     #url (r'^accounts/register/$','Hoteles.views.register_user'),
+    url(r'^(.*)$','Hoteles.views.paginaUsuario'),
+
 
 ]

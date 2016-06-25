@@ -1,0 +1,45 @@
+{%extends "base.html"%}
+
+{%block content%}
+<div class="content">
+
+<div class = "right">
+  <ul>
+  {% for h in listausers %}
+    {% if h.titulo_pagina == condicion %}
+      <a href= "{{ h.user }}">Pagina de {{ h.user }}</a></li>
+    {% else %}
+    <li ><a href= "{{ h.username }}">Pagina de {{ h.username }}</a></li>
+    {% endif %}
+{% endfor %}
+</ul>
+<div class="submenu_end"></div>
+</div>
+</div>
+
+<div clas="left">
+  <div class="well well-sm panel panel-default col-md-12" >
+    <div class="panel-body">
+      <div class="item">
+        <ul class="mainList">
+          <li>
+            <item>
+
+          {% for h in lista %}
+          <li><a href= "{{ h.url }}">{{h.nombre}}</a></li>
+          <li>{{ h.direccion }}</li>
+          <li>Identificador de la aplicacion :{{h.id}}</li>
+          <img src="{{ h.urlimagen}}"></img>
+          <li><a href="alojamientos/{{h.id}}">Más información </li>
+          {% endfor %}
+         </item>
+       </li><br/><hr class="separator" width="500" height = "250">
+     </div>
+
+      </div>
+    </div>
+  </div>
+  <br class="cleaner"/><span></span>
+
+
+{% endblock %}

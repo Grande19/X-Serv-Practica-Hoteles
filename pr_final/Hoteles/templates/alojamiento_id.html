@@ -1,37 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8' />
-    {% load staticfiles %}
-    <link rel="stylesheet"  type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-  </head>
-  <body>
-    <div id="header">
-      <img src="https://www.europcar.es/files/live/sites/seo/files/contributed/images/location%20images/corporate%20countries/Spain/Madrid-2-1160x400.jpg"></img>
-    </div>
-    <div class="container-fluid">
-     </div>
-      <ul class="nav nav-tabs">
-        <li class="active"><a href="/">Princial</a></li>
-        <li><a href="/alojamientos">Alojamientos</a></li>
-        <li><a href="/about">About</a></li>
+{%extends "base.html" %}
 
-      </ul>
-      <div>
-          {% if user.is_authenticated %}
-            <h3> You are inside {{ user }}</h3>
-            <h3> Write a comment ...</h3>
-            <form action="" method="post" accept-charset="utf-8">
-              {% csrf_token %}
-            <textarea name="comentarios" rows="10" cols="40">Escribe aquí tus comentarios</textarea>
-            <p><input type="submit" value="Send →"></p>
-          </form>
-          <a href="{{ pathi }}"> XML Inglés </a>
-          <a href="{{ pathf }}"+"/xmlfrances"> XML Francés </a>
-        {% endif %}
-    </div>
+{%block content%}
 
     <div class"col-md-9 well well-sm">
       <h3> Nombre : {{ name }}</h3>
@@ -50,6 +19,18 @@
     <div class="col-md-12">
       <li>{{ body |safe }}</li>
     </div>
+    <div>
+        {% if autenticado %}
+          <h3> Escribe un comentario </h3>
+          <form action="" method="post" accept-charset="utf-8">
+            {% csrf_token %}
+          <textarea name="comentarios" rows="3" cols="40">Escribe aquí tus comentarios</textarea>
+          <p><input type="submit" value="Enviar" ></p>
+        </form>
+        <a href="{{ pathi }}"> XML Inglés </a>
+        <a href="{{ pathf }}"+"/xmlfrances"> XML Francés </a>
+      {% endif %}
+    </div>
   <div class="row">
     <div class="col-md-12 well well-sm panel panel-default">
       <div class="panel-body">
@@ -65,3 +46,5 @@
 </div>
   </body>
 </html>
+
+{%endblock%}

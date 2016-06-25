@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; 	charset=utf-8" />
+    <meta name="keywords" content="keywords" />
+    <meta name="description" content="description" />
+    <meta name="author" content="www.studio7designs.com" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css"  />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <title>Alojamientos Madrid </title>
+
+  </head>
+
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+
+<body >
+<div class="container">
+  <div class = "top">
+    <div  align = "center">
+      <img  src="https://www.europcar.es/files/live/sites/seo/files/contributed/images/location%20images/corporate%20countries/Spain/Madrid-2-1160x400.jpg"></img>
+    </div>
+
+    <div class="login" style="position:relative; left:5% ; bottom:50px">
+            {% if autenticado %}
+              <h3 style="color:white;"> Bienvenido  {{ user }}</h3>
+              <a href='/accounts/logout'>Logout</a><br>
+
+            {% else %}
+
+
+              <form method="post" action="accounts/login">
+              {% csrf_token %}
+
+
+               <label style="color:white" for="username"> Nombre de usario : </label>
+               <input type="text" name = "username" value="" id="username" size="15" maxlength="35">
+               <label style="color:white" for="password"> Password : </label>
+                <input type="password" name="password" value="" id="password">
+
+                <input type="submit" value="Entrar" />
+
+
+
+
+
+              </form>
+            {% endif%}
+          <br></br>
+
+<div  class="cleaner" style="position:relative;bottom:20%">
+  <a href="/">Principal</a></li>
+  <a href="/alojamientos">Alojamientos</a></li>
+  <a href="/about">About</a></li>
+</div>
+
+<div class="content">
+  {%block content%} {%endblock%}
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+
+
+
+</div>
+</div>
+
+<div class="footer" align = "Center">Copyright . Esta aplicacion utiliza datos del portal de datos abierto de la ciudad de Madrid <a href="http://www.esmadrid.com/opendata/alojamientos_v1_es.xml"> Datos XML</a></p>
+<p><a href="http://bit.ly/1T24Zsq">Descripción de los datos</a></p></div>
+  </body>
+</html>

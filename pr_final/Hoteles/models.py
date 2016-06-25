@@ -14,6 +14,11 @@ class Hotel (models.Model):
     tipo = models.CharField(max_length = 32,default="")
     urlimagen = models.URLField()
 
+class SelectedHotel (models.Model):
+    idHotel = models.ForeignKey(Hotel)
+    usuario = models.ForeignKey(User,default = "")
+    fecha_seleccion = models.DateField(null = True , blank = True)
+
 
 
 class Comentario(models.Model) :
@@ -29,8 +34,8 @@ class Imagen(models.Model) :
     img = models.ForeignKey(Hotel,default="")
     idHotel = models.IntegerField(default=0)
 
-class StyleCSS (models.Model) :
+class CSS (models.Model) :
     usuario = models.ForeignKey(User)
     color = models.CharField(max_length=300,default="")
     size=models.CharField(max_length=200,default="")
-    titulo_pagina = models.CharField(max_length = 32,default = "")
+    titulo = models.CharField(max_length = 32,default = "")

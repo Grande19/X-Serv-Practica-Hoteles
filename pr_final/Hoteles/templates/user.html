@@ -1,32 +1,14 @@
-<!DOCTYPE html>
+{%extends "base.html" %}
+
+{%block content%}
 <html>
   <head>
-    <meta charset='utf-8' />
-    {% load staticfiles %}
-    <link rel="stylesheet"  type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-  <style>
-    body{
-      background-color: {{ color }}
+  
 
-    }
-    body{
-      font-size: {{ size }}
-    }
-  </style>
-  </head>
-  <body>
-    <div id="header">
-      <img src="http://datos.madrid.es/FWProjects/egob/nuevoMadrid/secciones/DatosAbiertos_1400X351.png"></img>
-    </div>
-    <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-      
-      <h2> {{ usuario }}</h2>
       {% if user.is_authenticated and usuario == request.user.username %}
-        <h3> You are inside {{ user }}</h3>
+      <h2> Pagina privada de {{ usuario }}</h2>
+
+
 
         <form action="" method="post" accept-charset="utf-8">
           {% csrf_token %}
@@ -38,6 +20,8 @@
           <input type="text" name="titulo" value=""></input>
           <p><input type="submit" value="Send →"></p>
       </form>
+      {%else%}
+      <h2> Para acceder a este contenido tienes que estar autenticado </h2>
     {% endif %}
     </div>
   </div>
@@ -54,3 +38,5 @@
 </div>
   </body>
 </html>
+
+  {%endblock%}

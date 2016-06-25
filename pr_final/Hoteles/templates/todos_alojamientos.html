@@ -1,38 +1,16 @@
-<!DOCTYPE html>
+{%extends "base.html" %}
+
+{%block content%}
 <html>
   <head>
     <title>Alojamientos</title>
-    <meta charset='utf-8' />
-      {% load staticfiles %}
-      <link rel="stylesheet"  type="text/css" href="{% static 'css/style.css' %}">
-      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-      <style>
-        body{
-          background-color: {{ color }}
-        }
-        body{
-          font-size: {{size}}
-        }
 
       </style>
     </head>
   </head>
   <body>
 
-    <div id="header">
-      <img src="https://www.europcar.es/files/live/sites/seo/files/contributed/images/location%20images/corporate%20countries/Spain/Madrid-2-1160x400.jpg"></img>
-    </div>
-
-    </ul>
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="/">Principal</a></li>
-      <li><a href="/alojamientos">Alojamientos</a></li>
-      <li><a href="/about">About</a></li>
-
-    </ul>
-    <br></br>
-
+    
     <form action="" method="POST" >{% csrf_token %}
         <select id="categoria" name="estrellas">
           <option value="todos" selected="selected">- select -</option>
@@ -85,3 +63,4 @@
   </div>
   </body>
 </html>
+{%endblock%}
