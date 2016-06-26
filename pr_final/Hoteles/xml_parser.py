@@ -3,7 +3,7 @@ from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 import sys
 import urllib
-from  models import Hotel , Imagen , Comentario
+from  models import Hotel , Image 
 
 
 class myContentHandler(ContentHandler):

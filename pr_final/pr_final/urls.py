@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from django.conf import settings
 #from . import
 
 urlpatterns = [
@@ -34,6 +33,5 @@ urlpatterns = [
     #url (r'^accounts/register_success/$','Hoteles.views.register_success'),
     #url (r'^accounts/register/$','Hoteles.views.register_user'),
     url(r'^(.*)$','Hoteles.views.paginaUsuario'),
-
 
 ]

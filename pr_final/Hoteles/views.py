@@ -1,9 +1,11 @@
+
+
+# Create your views here.
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render
-
-from models import Hotel , CSS , Comentario , Imagen , SelectedHotel
+from models import Hotel , HotelSelect , StyleCSS , Comentario , Image
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from xml_parser import myContentHandler
 #from django.core.context_procesors import csrf
@@ -14,7 +16,6 @@ from django.template.loader import get_template
 from django.template import Context
 from django.core.exceptions import ObjectDoesNotExist
 import urllib , urllib2
-#from xml_parser import CounterHandler
 from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 from django.shortcuts import render_to_response
@@ -24,43 +25,16 @@ from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 def login(request):
-
-
     return render_to_response('login.html',RequestContext(request,{}))
 
 def auth_view(request):
-    if request.method == 'POST':
-        username = request.POST['Usuario']
-        password = request.POST['Password']
-        lista = User.objects.all()
-        for fila in lista :
-            if fila.username == user :
-                error = ""
-                error += '<span>Error.</span><br>'
-                error += 'El nombre de usuario está en uso . Introduzca otro'
-                plantilla = get_('plantilla_index.html')
-                c = Context({'loggin': log, 'inicio': inicio, 'error': error})
-                renderizado = plantilla.render(c)
-                return HttpResponse(renderizado)
 
-        user = User.objects.create_user(username,username + '@ejemplo.com',password)
-        user.save()
-        user = User(nombre = username )
-        user.save()
-        #estilo_pagina = EstiloCss(usuario=usuario, banner='imagenes/alcala.png', login="", menu="red", pie="red")
-        #estilo_pagina.save()
-        return HttpResponseRedirect('/')
-
-    #plantilla = get_('2.html')
-#    c = Context({'loggin': log})
-    #renderizado = plantilla.render(c)
-    #return HttpResponse(renderizado)
 
     listauser = User.objects.all()
     username = request.POST.get('username','')
     password = request.POST.get('password','')
-    c = Context({'nombre':request.user.username})
-    return render_to_response('plantilla_index.html', RequestContext(request),c)
+    #c = Context({'nombre':request.user.username})
+    #return render_to_response('index.html', RequestContext(request),c)
     user = auth.authenticate(username = username , password = password)
 
     if user is not None :
@@ -84,35 +58,34 @@ def logout(request):
 
 
 
+# Create your views here.
+
+
+def loggear(request):
+    if request.method == "POST" :
+        user
+
 def about(request):
-    cuerpo = ""
-    log = ""
-    titulo = "About this page"
-    inicio = '<a href = "/">Principal</a>'
-
-
-    cuerpo = ""
-    log = ""
-    titulo = u"About. Información Alojamientos de Madrid"
-    inicio = '<a href="/">Inicio</a>'
-    error = ''
-
 
 
 
     #Logearse en ayuda
 
     #plantilla = get_template('template.html')
-    c = Context({ 'contenido': cuerpo, 'titulo': titulo, 'inicio': inicio})
+
     #renderizado = plantilla.render(c)
     #return HttpResponse(renderizado)
-    return render_to_response('about.html', c , context_instance = RequestContext(request))
+    return render_to_response('about.html', context_instance = RequestContext(request))
 
 
 
 def todos(request):
     lista = Hotel.objects.all()
+
     listausu = User.objects.all()
+
+    #listausu = Usuarios.objects.all()
+
     filtro_estrellas = ""
     filtro_subcategoria = ""
     if request.method == 'POST':
@@ -139,7 +112,11 @@ def principal(request):
     respuesta=""
     salida=""
     lista=Hotel.objects.all()
+    print lista
     listauser=User.objects.all()
+
+    listauser=""
+
     #User es el admin el creo por defecto que no guardo en models
     print listauser
 
@@ -156,7 +133,7 @@ def principal(request):
     #    user = User.objects.get(nombre=request.user.username)
     #else
     #    return render_to_response('invalid_login.html')
-    template = get_template("plantilla_index.html")
+    template = get_template("index.html")
     context = {'lista':lista[0:10],'user':request.user.username,'listausers':listauser,'condicion':""}
     autenticado = request.user.is_authenticated
     if autenticado:
@@ -164,21 +141,23 @@ def principal(request):
                 usuario=User.objects.get(username=request.user.username)
             except User.DoesNotExist:
                 context = {'lista':lista[0:10],'user':request.user.username}
-                return render_to_response('plantilla_index.html', context, context_instance = RequestContext(request))
+                return render_to_response('index.html', context, context_instance = RequestContext(request))
 
     listausers = User.objects.all()
     context = {'autenticado': request.user.is_authenticated, 'lista':lista[0:10],'user':request.user.username,'listausers':listauser,'condicion':" "}
-    return render_to_response('plantilla_index.html', context, RequestContext(request))
+    return render_to_response('index.html', context, RequestContext(request))
 
 
 
 
 def alojamientoid (request , id):
+    #poner los idiomas
     lista = Hotel.objects.get(id=id)
-    imagelist = Imagen.objects.filter(idHotel = lista.id)
+    imagelist = Image.objects.filter(idHotel = lista.id)
+
     listausu = User.objects.all()
     autenticado = request.user.is_authenticated
-    listacomment =Comentario.objects.filter(idHotel=lista.id)
+
 
     if request.method == 'POST' :
         value = request.POST.get("comentario","")
@@ -192,12 +171,13 @@ def alojamientoid (request , id):
             print comentario
     listacomment =Comentario.objects.filter(idHotel=lista.id)
     context = {'autenticado':autenticado,'lista':imagelist[0:5],'h':lista,'condicion':"",'url':lista.url,'name':lista.nombre, 'body':lista.descripcion,
-                'address':lista.direccion,'comentarios':listacomment,'type':lista.tipo,'stars':lista.estrellas,
-                'user':request.user.username,'listausers':listausu}
+                'address':lista.direccion,'comentarios':listacomment,'type':lista.tipo,'stars':lista.estrellas}
+
+
     #if request.user.is_authenticated():
     #    us=PagUser.objects.get(user=request.user.username)
     #    context = {'lista':listimages[0:5],'h':hoteles,'condicion':"",'url':lista.url,'name':lista.name,
-    #                'address':lista.address,'comentarios':listcoms,'type':lista.tipo,'stars':lista.stars, 'body':lista.body,
+    #                'address':lista.address,'Comentarios':listcoms,'type':lista.tipo,'stars':lista.stars, 'body':lista.body,
     #                'color':us.color,'size':us.size,'user':request.user.username,'listausers':listauser}
 
     return render_to_response('alojamiento_id.html', context,context_instance = RequestContext(request))
@@ -236,7 +216,7 @@ def pagina_usuario (request , recurso) :
         log += '<br><a href = "/logaout">Salir</a>'
 
     if recurso == request.user.username :
-        cambio_titulo += '<form action ="" method= "POST">Cambiar título de la pagina<br><input type = "text" name = "Titulo"'
+        cambio_titulo += '<form action ="" method= "POST">Cambiar titulo de la pagina<br><input type = "text" name = "Titulo"'
 
         cambio_titulo += '<input type = "submit" value = "Cambiar" > '
         cambio_titulo += '</form>'
@@ -287,7 +267,7 @@ def paginaUsuario(request , usuario) :
 
         cuerpo = ""
         log = ""
-        titulo = u"About. Información Alojamientos de Madrid"
+        titulo = u"About. Informacion Alojamientos de Madrid"
         inicio = '<a href="/">Inicio</a>'
         error = ''
 
@@ -302,28 +282,56 @@ def paginaUsuario(request , usuario) :
     elif u == "accounts/logout":
         auth.logout(request)
         return render_to_response('logout.html')
+    elif u == "accounts/login":
+        autenticado = request.user.is_authenticated
+        username = request.user.username
+        context = {'autenticado':autenticado , 'user':username}
+
+        return render_to_response('login.html',context,RequestContext(request,{}))
+    elif u == "accounts/auth":
+        listauser = User.objects.all()
+        username = request.POST.get('username','')
+        password = request.POST.get('password','')
+        #c = Context({'nombre':request.user.username})
+        #return render_to_response('index.html', RequestContext(request),c)
+        user = auth.authenticate(username = username , password = password)
+
+        if user is not None :
+            auth.login(request,user)
+            return HttpResponseRedirect('/accounts/loggedin')
+        else:
+            return HttpResponseRedirect('/accounts/invalid')
+    elif u == "accounts/loggedin":
+        return render_to_response('loggedin.html',{'full_name':request.user.username})
+    elif u == "accounts/invalid":
+        return render_to_response('invalid_login.html')
+
+
+
+
+
 
     else:
 
 
         try:
-            css = CSS.objects.all()
+            css = StyleCSS.objects.all()
             #titulo  = CSS.titulo
             titulo = ""
             u = usuario
-        except CSS.DoesNotExist :
+        except StyleCSS.DoesNotExist :
             usuario = User.objects.get(usuario = usuario)
             u = usuario.usuario
             titulo = ""
         try:
-            hotelusu = SelectedHotel.objects.all()
+            hotelusu = HotelSelect.objects.all()
             #for idHotel in hotelusu:
-            #imagenes = Imagen.objects.filter(idHotel = alojamiento.alojamiento_id)
-            #if len(imagenes)>0:
-            #    list_aloj.append((alojamiento, imagenes[0].url))
+            #Imagees = Image.objects.filter(idHotel = alojamiento.alojamiento_id)
+            #if len(Imagees)>0:
+            #    list_aloj.append((alojamiento, Imagees[0].url))
             #else:
             #    list_aloj.append((alojamiento, ""))
-        except SelectedHotel.DoesNotExist:
+        except HotelSelect.DoesNotExist:
             print "No existen favoritos..."
 
     #template = get_template('user.html')

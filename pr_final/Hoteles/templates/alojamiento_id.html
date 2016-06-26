@@ -35,13 +35,19 @@
     <div class="col-md-12 well well-sm panel panel-default">
       <div class="panel-body">
         <h3> Comentarios: </h3>
+
           {% for h in comentarios %}
             <p>Introducido por {{h.usuario.nombre}} el día {{h.date}} -> {{ h.contenido }}</li> </p>
+
+
+          {% for h in listacomment %}
+            <p> <li>{{ h.contenido }}</li> </p>
 
           {% endfor %}
       </div>
     </div>
   </div>
+  {% endfor %}
 
 </div>
   </body>
