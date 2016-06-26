@@ -1,92 +1,45 @@
-<!DOCTYPE html>
+{%extends "base.html"%}
 
-<html>
-  <head>
-    <meta charset='utf-8' />
-    {% load staticfiles %}
-    <link rel="stylesheet"  type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <style>
-      body{
-        background-color: {{ color }}
-      }
-      body{
-        font-size: {{size}}
-      }
-    </style>
-  </head>
+{%block content%}
+<div class="content">
 
-<body>
-<div id="header">
-  <img src="https://www.europcar.es/files/live/sites/seo/files/contributed/images/location%20images/corporate%20countries/Spain/Madrid-2-1160x400.jpg"></img>
-</div>
-<ul class="nav nav-tabs">
-  <li class="active"><a href="/">Principal</a></li>
-  <li><a href="/alojamientos">Alojamientos</a></li>
-  <li><a href="/about">About</a></li>
-
+<div class = "right">
+  <ul>
+  {% for h in listausers %}
+    {% if h.titulo_pagina == condicion %}
+      <a href= "{{ h.user }}">Pagina de {{ h.user }}</a></li>
+    {% else %}
+    <li ><a href= "{{ h.username }}">Pagina de {{ h.username }}</a></li>
+    {% endif %}
+{% endfor %}
 </ul>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-6">
-      <div class="panel panel-default"  id = "login">
-        <div class="panel-body" >
-          {% if nombre %}
-            <h3> You're inside  {{ Usuarios.nombre }}</h3>
-            <a href='/'>Logout</a><br>
-            {% else %}
-            <h3>Login</h3>
-            <form action="/login" method="POST" accept-charset="utf-8">
-              {% csrf_token %}
-              <label for="username">Username</label><input type="text" name="username" value="" />
-              <label for="password">Password</label><input type="password" name="password" value=""  />
-              <p><input type="submit" value="Login"></p>
-              <p><a href="/register">Registrate</a></p>
-            </form>
-            {% endif%}
-          </div>
-        </div>
-      </div>
-  <div class= "panel panel-default" id= 'pagusers'>
-    <div class="panel-body" >
-      <div class="col-md-6">
-      <ul>
-        {% for h in listausers %}
-          {% if h.titulo_pagina == condicion %}
-            <li align=right><a href= "{{ h.nombre }}">Pagina de {{ h.nombre }}</a></li>
-          {% else %}
-            <li><a href= "{{ h.hoteles }}">{{h.nombre}}</a></li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-  </div>
-  </div>
+<div class="submenu_end"></div>
 </div>
 </div>
-  <div clas="row">
-  <div class="well well-sm panel panel-default col-md-12" id="listhotels">
+
+<div clas="left">
+  <div class="well well-sm panel panel-default col-md-12" >
     <div class="panel-body">
-    <ul>
-      {% for h in lista %}
+      <div class="item">
+        <ul class="mainList">
+          <li>
+            <item>
+
+          {% for h in lista %}
           <li><a href= "{{ h.url }}">{{h.nombre}}</a></li>
           <li>{{ h.direccion }}</li>
           <li>Identificador de la aplicacion :{{h.id}}</li>
-
-
-
-            <img src="{{ h.urlimagen}}"></img>
-
-
+          <img src="{{ h.urlimagen}}"></img>
           <li><a href="alojamientos/{{h.id}}">Más información </li>
-      {% endfor %}
-  </ul>
+          {% endfor %}
+         </item>
+       </li><br/><hr class="separator" width="500" height = "250">
+     </div>
+
+      </div>
+    </div>
   </div>
-  </div>
-    <a href="more"> Más </a>
-</div>
-</div>
-<footer> <p>Copyright . Esta aplicacion utiliza datos del portal de datos abierto de la ciudad de Madrid <a href="http://www.esmadrid.com/opendata/alojamientos_v1_es.xml"> Datos XML</a></p> </footer>
-<footer> <p><a href="http://bit.ly/1T24Zsq">Descripción de los datos</a></p></footer>
-  </body>
-</html>
+  <br class="cleaner"/><span></span>
+
+
+{% endblock %}

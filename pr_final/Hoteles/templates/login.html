@@ -1,0 +1,23 @@
+{%extends "base.html" %}
+
+{%block content%}
+
+<html>
+
+<body>
+{% if form.errors %}
+  <p class="error"> Usuario o contraseña no válidos</p>
+
+<br></br>
+
+{%else%}
+
+
+  {% csrf_token %}
+
+
+</form>
+{%endif%}
+</body>
+</html>
+{% endblock%}

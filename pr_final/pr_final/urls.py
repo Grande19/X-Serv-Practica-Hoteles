@@ -23,12 +23,15 @@ urlpatterns = [
     url(r'^alojamientos/$' , 'Hoteles.views.todos'),
     url(r'^$' , 'Hoteles.views.principal'),
     url(r'^login', 'django.contrib.auth.views.login'),
-    url(r'^logout', 'django.contrib.auth.views.logout', {'next_page': '/'}),
-    url(r'^register/$', 'Hoteles.views.new_user'),
-    #url(r'^usuario/$','Hoteles.views.usuario')
+    #url(r'^logout', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url (r'^alojamientos/(\d+)$' , 'Hoteles.views.alojamientoid'),
-    #url(r'^usuario/$' , 'Hoteles.views.usuario')
-    #url(r'^(.*)$','Hoteles.views.paginaUsuario')
-
+    url (r'^accounts/login/$','Hoteles.views.login'),
+    url (r'^accounts/auth/$','Hoteles.views.auth_view'),
+    url (r'^accounts/logout/$','Hoteles.views.logout'),
+    url (r'^accounts/loggedin/$','Hoteles.views.loggedin'),
+    url (r'^accounts/invalid/$','Hoteles.views.invalid_login'),
+    #url (r'^accounts/register_success/$','Hoteles.views.register_success'),
+    #url (r'^accounts/register/$','Hoteles.views.register_user'),
+    url(r'^(.*)$','Hoteles.views.paginaUsuario'),
 
 ]
