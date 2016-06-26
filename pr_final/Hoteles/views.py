@@ -28,39 +28,16 @@ from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 def login(request):
-
-
     return render_to_response('login.html',RequestContext(request,{}))
 
 def auth_view(request):
-    if request.method == 'POST':
-        username = request.POST['Usuario']
-        password = request.POST['Password']
-        lista = User.objects.all()
-        for fila in lista :
-            if fila.username == user :
-                error = ""
-                error += '<span>Error.</span><br>'
-                error += 'El nombre de usuario está en uso . Introduzca otro'
-                plantilla = get_('index.html')
-                c = Context({'loggin': log, 'inicio': inicio, 'error': error})
-                renderizado = plantilla.render(c)
-                return HttpResponse(renderizado)
-
-        user = User.objects.create_user(username,username + '@ejemplo.com',password)
-        user.save()
-        user = User(nombre = username )
-        user.save()
-        #estilo_pagina = EstiloCss(usuario=usuario, banner='imagenes/alcala.png', login="", menu="red", pie="red")
-        #estilo_pagina.save()
-        return HttpResponseRedirect('/')
 
 
     listauser = User.objects.all()
     username = request.POST.get('username','')
     password = request.POST.get('password','')
-    c = Context({'nombre':request.user.username})
-    return render_to_response('index.html', RequestContext(request),c)
+    #c = Context({'nombre':request.user.username})
+    #return render_to_response('index.html', RequestContext(request),c)
     user = auth.authenticate(username = username , password = password)
 
     if user is not None :
@@ -335,7 +312,28 @@ def paginaUsuario(request , usuario) :
         auth.logout(request)
         return render_to_response('logout.html')
     elif u == "accounts/login":
-        return render_to_response('login.html',RequestContext(request,{}))
+        autenticado = request.user.is_authenticated
+        username = request.user.username
+        context = {'autenticado':autenticado , 'user':username}
+
+        return render_to_response('login.html',context,RequestContext(request,{}))
+    elif u == "accounts/auth":
+        listauser = User.objects.all()
+        username = request.POST.get('username','')
+        password = request.POST.get('password','')
+        #c = Context({'nombre':request.user.username})
+        #return render_to_response('index.html', RequestContext(request),c)
+        user = auth.authenticate(username = username , password = password)
+
+        if user is not None :
+            auth.login(request,user)
+            return HttpResponseRedirect('/accounts/loggedin')
+        else:
+            return HttpResponseRedirect('/accounts/invalid')
+    elif u == "accounts/loggedin":
+        return render_to_response('loggedin.html',{'full_name':request.user.username})
+
+
 
 
     else:

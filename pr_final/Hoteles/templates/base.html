@@ -24,14 +24,14 @@
     </div>
 
     <div class="login" style="position:relative; left:5% ; bottom:50px">
-            {% if autenticado %}
+            {% if request.user.is_authenticated %}
               <h3 style="color:white;"> Bienvenido  {{ user }}</h3>
               <a href='/accounts/logout'>Logout</a><br>
 
             {% else %}
 
 
-              <form method="post" action="accounts/login">
+              <form method="post" action="/accounts/auth/">
               {% csrf_token %}
 
 

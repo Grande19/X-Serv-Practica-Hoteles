@@ -17,7 +17,7 @@ class Hotel (models.Model):
 class Comentario(models.Model) :
     contenido = models.TextField(default = "")
     hotel = models.ForeignKey(Hotel)
-    #idHotel = models.IntegerField(default=0
+    idHotel = models.IntegerField(default=0)
     fecha = models.DateTimeField(auto_now=True)
 
 class HotelSelect (models.Model):

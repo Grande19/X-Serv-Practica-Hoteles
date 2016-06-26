@@ -7,14 +7,18 @@
 <body>
 {% if form.errors %}
   <p class="error"> Usuario o contraseña no válidos</p>
-
 <br></br>
 
 {%else%}
 
-
+<form action="/accounts/auth/" method="POST">
   {% csrf_token %}
+  <label for="username"> Nombre de usario : </label>
+  <input type="text" name = "username" value="" id="username">
+  <label for="password"> Password : </label>
+  <input type="password" name="password" value="" id="password">
 
+  <input type="submit" value="login" />
 
 </form>
 {%endif%}
