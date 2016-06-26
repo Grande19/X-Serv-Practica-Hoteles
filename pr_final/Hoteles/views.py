@@ -5,7 +5,16 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render
+<<<<<<< HEAD
 from models import Hotel , HotelSelect , StyleCSS , Comentario , Image
+=======
+
+
+
+
+from models import Hotel , HotelSelect , StyleCSS , Comentario , Imagen
+
+>>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from xml_parser import myContentHandler
 #from django.core.context_procesors import csrf
@@ -68,14 +77,30 @@ def loggear(request):
 def about(request):
 
 
+<<<<<<< HEAD
+=======
+    cuerpo = ""
+    log = ""
+    titulo = u"About. Información Alojamientos de Madrid"
+    inicio = '<a href="/">Inicio</a>'
+    error = ''
+
+>>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
 
     #Logearse en ayuda
 
     #plantilla = get_template('template.html')
+<<<<<<< HEAD
 
     #renderizado = plantilla.render(c)
     #return HttpResponse(renderizado)
     return render_to_response('about.html', context_instance = RequestContext(request))
+=======
+    c = Context({ 'contenido': cuerpo, 'titulo': titulo, 'inicio': inicio})
+    #renderizado = plantilla.render(c)
+    #return HttpResponse(renderizado)
+    return render_to_response('about.html', c , context_instance = RequestContext(request))
+>>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
 
 
 
@@ -112,7 +137,11 @@ def principal(request):
     respuesta=""
     salida=""
     lista=Hotel.objects.all()
+<<<<<<< HEAD
     print lista
+=======
+
+>>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
     listauser=User.objects.all()
 
     listauser=""
@@ -153,11 +182,18 @@ def principal(request):
 def alojamientoid (request , id):
     #poner los idiomas
     lista = Hotel.objects.get(id=id)
+<<<<<<< HEAD
     imagelist = Image.objects.filter(idHotel = lista.id)
 
     listausu = User.objects.all()
     autenticado = request.user.is_authenticated
 
+=======
+    imagelist = Imagen.objects.filter(idHotel = lista.id)
+
+    listausu = User.objects.all()
+    autenticado = request.user.is_authenticated
+    listacomment = Comentario.objects.filter(idHotel=lista.id)
 
     if request.method == 'POST' :
         value = request.POST.get("comentario","")
@@ -173,7 +209,35 @@ def alojamientoid (request , id):
     context = {'autenticado':autenticado,'lista':imagelist[0:5],'h':lista,'condicion':"",'url':lista.url,'name':lista.nombre, 'body':lista.descripcion,
                 'address':lista.direccion,'comentarios':listacomment,'type':lista.tipo,'stars':lista.estrellas}
 
+    listausu = ""
+    Comentario = ""
+>>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
 
+    if request.method == 'POST' :
+        value = request.POST.get("comentario","")
+        print "haciendo post"
+        if value!="":
+            comentario = Comentario (idHotel = lista.id , contenido = value , hotel = lista)
+            comentario.save()
+            print comentario.contenido
+        else :
+<<<<<<< HEAD
+            comentario = Comentario.objects.filter(idHotel = lista.id)
+            print comentario
+    listacomment =Comentario.objects.filter(idHotel=lista.id)
+    context = {'autenticado':autenticado,'lista':imagelist[0:5],'h':lista,'condicion':"",'url':lista.url,'name':lista.nombre, 'body':lista.descripcion,
+                'address':lista.direccion,'comentarios':listacomment,'type':lista.tipo,'stars':lista.estrellas}
+
+
+=======
+            Comentario = Comentario.objects.filter(idHotel = lista.id)
+            print Comentario
+    listaComentario =""
+    context = {'lista':imagelist[0:5],'h':lista,'condicion':"",'url':lista.url,'name':lista.nombre, 'body':lista.descripcion,
+                'address':lista.direccion,'Comentarios':listaComentario,'type':lista.tipo,'stars':lista.estrellas,
+
+                'user':request.user.username,'listausers':listausu}
+>>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
     #if request.user.is_authenticated():
     #    us=PagUser.objects.get(user=request.user.username)
     #    context = {'lista':listimages[0:5],'h':hoteles,'condicion':"",'url':lista.url,'name':lista.name,
@@ -216,7 +280,11 @@ def pagina_usuario (request , recurso) :
         log += '<br><a href = "/logaout">Salir</a>'
 
     if recurso == request.user.username :
+<<<<<<< HEAD
         cambio_titulo += '<form action ="" method= "POST">Cambiar titulo de la pagina<br><input type = "text" name = "Titulo"'
+=======
+        cambio_titulo += '<form action ="" method= "POST">Cambiar título de la pagina<br><input type = "text" name = "Titulo"'
+>>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
 
         cambio_titulo += '<input type = "submit" value = "Cambiar" > '
         cambio_titulo += '</form>'
@@ -267,7 +335,11 @@ def paginaUsuario(request , usuario) :
 
         cuerpo = ""
         log = ""
+<<<<<<< HEAD
         titulo = u"About. Informacion Alojamientos de Madrid"
+=======
+        titulo = u"About. Información Alojamientos de Madrid"
+>>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
         inicio = '<a href="/">Inicio</a>'
         error = ''
 
@@ -303,10 +375,13 @@ def paginaUsuario(request , usuario) :
             return HttpResponseRedirect('/accounts/invalid')
     elif u == "accounts/loggedin":
         return render_to_response('loggedin.html',{'full_name':request.user.username})
+<<<<<<< HEAD
     elif u == "accounts/invalid":
         return render_to_response('invalid_login.html')
 
 
+=======
+>>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
 
 
 
@@ -326,9 +401,15 @@ def paginaUsuario(request , usuario) :
         try:
             hotelusu = HotelSelect.objects.all()
             #for idHotel in hotelusu:
+<<<<<<< HEAD
             #Imagees = Image.objects.filter(idHotel = alojamiento.alojamiento_id)
             #if len(Imagees)>0:
             #    list_aloj.append((alojamiento, Imagees[0].url))
+=======
+            #imagenes = Imagen.objects.filter(idHotel = alojamiento.alojamiento_id)
+            #if len(imagenes)>0:
+            #    list_aloj.append((alojamiento, imagenes[0].url))
+>>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
             #else:
             #    list_aloj.append((alojamiento, ""))
         except HotelSelect.DoesNotExist:
