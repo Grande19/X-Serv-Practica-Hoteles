@@ -1,19 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+{%load staticfiles%}
   <html>
+
   <head>
+
     <meta http-equiv="Content-Type" content="text/html; 	charset=utf-8" />
     <meta name="keywords" content="keywords" />
     <meta name="description" content="description" />
     <meta name="author" content="www.studio7designs.com" />
-    <link rel="stylesheet" href="/css/screen.css" type="text/css"  />
-    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="stylesheet" href="screen.css" type="text/css"  />
+    <link rel="shortcut icon" href="imagenes/favicon.png" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <title>Alojamientos Madrid </title>
 
   </head>
 
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
 
 
 <body >
@@ -25,8 +30,8 @@
 
     <div class="login" style="position:relative; left:5% ; bottom:50px">
             {% if request.user.is_authenticated %}
-              <h3 style="color:white;"> Bienvenido  {{ user }}</h3>
-              <a href='/accounts/logout'>Logout</a><br>
+              <h3 style="color:white;"> Bienvenido  {{ user }}
+              <a style="color:white" href='/accounts/logout'>Logout</a><br></h3>
 
             {% else %}
 
@@ -48,13 +53,14 @@
 
               </form>
             {% endif%}
-          <br></br>
+<br></br>
 
-<div  class="cleaner" style="position:relative;bottom:20%">
-  <a href="/">Principal</a></li>
+<div  class="navhome" style="position:relative;bottom:20%;size:10px">
+  <h4><a href="/">Principal</a></li>
   <a href="/alojamientos">Alojamientos</a></li>
-  <a href="/about">About</a></li>
+  <a href="/about">About</a></li></h4>
 </div>
+
 
 <div class="content">
   {%block content%} {%endblock%}

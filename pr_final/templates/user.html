@@ -27,12 +27,18 @@
   </div>
   <div class="row">
     <div class"col-md-12 well well-sm">
-      {% for h in lista %}
-          <li><a href= "{{ h.hotel.url }}">{{h.hotel.nombre}}</a></li>
+      {% for h in selecion %}
+      {%if user%}
+          <h3>{{h.hotel.nombre}}</h3>
+          <li>Direccion : {{h.hotel.nombre}}</li>
+          <li>Estrellas : {{h.hotel.estrellas}}</li>
 
-
-          <li><a href="/alojamientos/{{ h.hotel.id }}">Más información </li>
+          <li><a href="/alojamientos/{{ h.hotel.id }}">Más información </a></li>
+      {%else%}
+          <h2>No hay hoteles seleccionados por {{h.usuario}}</h2>
+      {%endif%}
       {% endfor %}
+      <br></br>
     </div>
   </div>
 </div>

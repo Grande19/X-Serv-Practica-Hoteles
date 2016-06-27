@@ -7,9 +7,9 @@
   <ul>
   {% for h in listausers %}
     {% if h.titulo_pagina == condicion %}
-      <a href= "{{ h.user }}">Pagina de {{ h.user }}</a></li>
+      <a href= "{{ h.nombre }}">Pagina de {{ h.nombre }}</a></li>
     {% else %}
-    <li ><a href= "{{ h.username }}">Pagina de {{ h.username }}</a></li>
+    <li ><a href= "{{ h.username }}">Pagina de {{h.username}}</a></li>
     {% endif %}
 {% endfor %}
 </ul>
@@ -28,13 +28,10 @@
           {% for h in lista %}
           <li><a href= "{{ h.url }}">{{h.nombre}}</a></li>
           <li>{{ h.direccion }}</li>
-          <li>Identificador de la aplicacion :{{h.id}}</li>
+
           <img src="{{ h.urlimagen}}"></img>
           <li><a href="alojamientos/{{h.id}}">Más información </li>
-<<<<<<< HEAD
             <br></br>
-=======
->>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
           {% endfor %}
          </item>
        </li><br/><hr class="separator" width="500" height = "250">

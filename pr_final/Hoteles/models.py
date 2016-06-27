@@ -16,6 +16,7 @@ class Hotel (models.Model):
     estrellas = models.CharField(max_length = 32)
     tipo = models.CharField(max_length = 32,default="")
     urlimagen = models.URLField()
+    n_comentarios = models.IntegerField(default = 0)
 
 
 class Comentario(models.Model) :
@@ -26,8 +27,9 @@ class Comentario(models.Model) :
     usuario = models.ForeignKey(User)
 
 class HotelSelect (models.Model):
+    hotel = models.ForeignKey(Hotel,blank="True")
     idHotel = models.IntegerField(default="")
-    usuario = models.CharField(max_length=32)
+    usuario = models.ForeignKey(User)
     fecha = models.DateTimeField(auto_now=True)
 
 class Image(models.Model) :

@@ -22,13 +22,13 @@
     <div>
         {% if autenticado %}
           <h3> Escribe un comentario </h3>
-          <form action="" method="post" accept-charset="utf-8">
+          <form action="/comentario/{{hotel.id}}" method="post" accept-charset="utf-8">
             {% csrf_token %}
           <textarea name="comentarios" rows="3" cols="40">Escribe aquí tus comentarios</textarea>
           <p><input type="submit" value="Enviar" ></p>
         </form>
-        <a href="{{ pathi }}"> XML Inglés </a>
-        <a href="{{ pathf }}"+"/xmlfrances"> XML Francés </a>
+        <a href="{{traduccioningles}}"> Traduccir a Inglés </a>
+        <a href="{{ traduccionfrances }}"> Traducir a Francés </a>
       {% endif %}
     </div>
   <div class="row">
@@ -37,7 +37,7 @@
         <h3> Comentarios: </h3>
 
           {% for h in comentarios %}
-            <p>Introducido por {{h.usuario.nombre}} el día {{h.date}} -> {{ h.contenido }}</li> </p>
+            <p>Introducido por {{h.usuario}} el día {{h.fecha}} -> {{ h.contenido }}</li> </p>
 
 
           {% for h in listacomment %}

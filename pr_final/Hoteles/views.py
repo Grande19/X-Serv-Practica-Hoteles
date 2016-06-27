@@ -5,20 +5,12 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render
-<<<<<<< HEAD
 from models import Hotel , HotelSelect , StyleCSS , Comentario , Image
-=======
-
-
-
-
-from models import Hotel , HotelSelect , StyleCSS , Comentario , Imagen
-
->>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from xml_parser import myContentHandler
-#from django.core.context_procesors import csrf
+import xml.etree.ElementTree as ET
 import datetime
+from operator import itemgetter
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.template.loader import get_template
@@ -64,43 +56,10 @@ def logout(request):
 
 
 
-
-
-
-# Create your views here.
-
-
-def loggear(request):
-    if request.method == "POST" :
-        user
-
 def about(request):
 
 
-<<<<<<< HEAD
-=======
-    cuerpo = ""
-    log = ""
-    titulo = u"About. Información Alojamientos de Madrid"
-    inicio = '<a href="/">Inicio</a>'
-    error = ''
-
->>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
-
-    #Logearse en ayuda
-
-    #plantilla = get_template('template.html')
-<<<<<<< HEAD
-
-    #renderizado = plantilla.render(c)
-    #return HttpResponse(renderizado)
     return render_to_response('about.html', context_instance = RequestContext(request))
-=======
-    c = Context({ 'contenido': cuerpo, 'titulo': titulo, 'inicio': inicio})
-    #renderizado = plantilla.render(c)
-    #return HttpResponse(renderizado)
-    return render_to_response('about.html', c , context_instance = RequestContext(request))
->>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
 
 
 
@@ -137,15 +96,10 @@ def principal(request):
     respuesta=""
     salida=""
     lista=Hotel.objects.all()
-<<<<<<< HEAD
+    orderlist = []
+
     print lista
-=======
-
->>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
     listauser=User.objects.all()
-
-    listauser=""
-
     #User es el admin el creo por defecto que no guardo en models
     print listauser
 
@@ -157,13 +111,21 @@ def principal(request):
         fil = urllib2.urlopen( 'http://www.esmadrid.com/opendata/alojamientos_v1_es.xml')
         theParser.parse(fil)
 
-    #autenticado = request.user.is_authenticated()
-    #if autenticado == True:
-    #    user = User.objects.get(nombre=request.user.username)
-    #else
-    #    return render_to_response('invalid_login.html')
+    orderlist = comentarios(lista)
+    cont = 10
+    for item in orderlist:
+        if cont > 0 and item[1]>0:
+            cont = cont -1
+            try:
+                hotel = Hotel.objects.get(id = item[0])
+                imagen = Image.objects.filter(idHotel = hotel.id)
+                usuarios = User.objects.all()
+            except ObjectDoesNotExist:
+                print "No existe el hotel"
+
+    print orderlist
     template = get_template("index.html")
-    context = {'lista':lista[0:10],'user':request.user.username,'listausers':listauser,'condicion':""}
+    context = {'lista':orderlist,'user':request.user.username,'listausers':listauser,'condicion':""}
     autenticado = request.user.is_authenticated
     if autenticado:
             try:
@@ -176,68 +138,67 @@ def principal(request):
     context = {'autenticado': request.user.is_authenticated, 'lista':lista[0:10],'user':request.user.username,'listausers':listauser,'condicion':" "}
     return render_to_response('index.html', context, RequestContext(request))
 
+def alojamiento_frances(request,id):
+    disponible_idioma = False
+    traduccion = urllib2.urlopen('http://www.esmadrid.com/opendata/alojamientos_v1_fr.xml')
+    tree = ET.parse(traduccion)
+    root = tree.getroot()
+    hotel = Hotel.objects.get(id=id)
+    print hotel.nombre
+    for child in root.iter('BasicData'):
+        nombre = child.find('name').text
+
+        if nombre == hotel.nombre:
+            disponible_idioma = True
+            descripcion = child.find('body').text
+            web = child.find('web').text
+            if descripcion == None:
+                descripcion = "Hotel description do not avaliable in english"
+            if web == None :
+                web = "Web do not avaliable in english "
+            break ;
+    if not disponible_idioma:
+        return HttpResponse ("Hotel do not avaliable in english")
+    for child in root.iter('geoData'):
+        direccion = child.find('address').text
+        if direccion == hotel.direccion:
+            pais = child.find ('country').text
+        break ;
+    for child in root.iter('media'):
+        url = child.find('url').text
+
+        if url == hotel.url:
+
+            break;
+
 
 
 
 def alojamientoid (request , id):
-    #poner los idiomas
+    traduccioningles = request.path+"/english"
+    traduccionfrances = request.path+"/francais"
     lista = Hotel.objects.get(id=id)
-<<<<<<< HEAD
     imagelist = Image.objects.filter(idHotel = lista.id)
 
     listausu = User.objects.all()
     autenticado = request.user.is_authenticated
 
-=======
-    imagelist = Imagen.objects.filter(idHotel = lista.id)
-
-    listausu = User.objects.all()
-    autenticado = request.user.is_authenticated
-    listacomment = Comentario.objects.filter(idHotel=lista.id)
 
     if request.method == 'POST' :
         value = request.POST.get("comentario","")
         print "haciendo post"
-        if value!="":
-            comentario = Comentario (idHotel = lista.id , contenido = value , hotel = lista)
-            comentario.save()
-            print comentario.contenido
-        else :
-            comentario = Comentario.objects.filter(idHotel = lista.id)
-            print comentario
+        cn = lista.numbercom+1
+        lista.numbercom = n
+        lista.save
+        comentario = Comentario (idHotel = lista.id , contenido = value , hotel = lista)
+        comentario.save()
+        print comentario.contenido
+
     listacomment =Comentario.objects.filter(idHotel=lista.id)
-    context = {'autenticado':autenticado,'lista':imagelist[0:5],'h':lista,'condicion':"",'url':lista.url,'name':lista.nombre, 'body':lista.descripcion,
-                'address':lista.direccion,'comentarios':listacomment,'type':lista.tipo,'stars':lista.estrellas}
-
-    listausu = ""
-    Comentario = ""
->>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
-
-    if request.method == 'POST' :
-        value = request.POST.get("comentario","")
-        print "haciendo post"
-        if value!="":
-            comentario = Comentario (idHotel = lista.id , contenido = value , hotel = lista)
-            comentario.save()
-            print comentario.contenido
-        else :
-<<<<<<< HEAD
-            comentario = Comentario.objects.filter(idHotel = lista.id)
-            print comentario
-    listacomment =Comentario.objects.filter(idHotel=lista.id)
-    context = {'autenticado':autenticado,'lista':imagelist[0:5],'h':lista,'condicion':"",'url':lista.url,'name':lista.nombre, 'body':lista.descripcion,
-                'address':lista.direccion,'comentarios':listacomment,'type':lista.tipo,'stars':lista.estrellas}
+    context = {'autenticado':autenticado,'lista':imagelist[0:5],'h':lista,'condicion':"",'url':lista.url,'name':lista.nombre, 'body':lista.descripcion,'user':request.user.username,'listausers':listausu,
+                'address':lista.direccion,'comentarios':listacomment,'type':lista.tipo,'stars':lista.estrellas,'traduccioningles':traduccioningles,'traduccionfrances':traduccionfrances}
 
 
-=======
-            Comentario = Comentario.objects.filter(idHotel = lista.id)
-            print Comentario
-    listaComentario =""
-    context = {'lista':imagelist[0:5],'h':lista,'condicion':"",'url':lista.url,'name':lista.nombre, 'body':lista.descripcion,
-                'address':lista.direccion,'Comentarios':listaComentario,'type':lista.tipo,'stars':lista.estrellas,
-
-                'user':request.user.username,'listausers':listausu}
->>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
     #if request.user.is_authenticated():
     #    us=PagUser.objects.get(user=request.user.username)
     #    context = {'lista':listimages[0:5],'h':hoteles,'condicion':"",'url':lista.url,'name':lista.name,
@@ -247,62 +208,24 @@ def alojamientoid (request , id):
     return render_to_response('alojamiento_id.html', context,context_instance = RequestContext(request))
     #return HttpResponse(imagelist.idHotel)
 
+def comentarios (lista):
+    dic = {}
+    orderlist = []
+    respuesta = ""
+    for hotel in lista:
+        iden = hotel.id
+        try:
+            comment = Comentario.objects.filter(idHotel = iden)
+            dic[iden] = len(comment)
+        except Comentario.DoesNotExist:
+            respuesta += "No tiene comentarios"
+    orderlist = sorted (dic.items(),key = itemgetter(1),reverse = True)
+
+    return orderlist
 
 
-
-"""
-def pagina_usuario (request , recurso) :
-    cuerpo = ""
-    usuario = User.objects.get(username=recurso)
-    #titulo = usuario.titulo_pagina
-    log = ""
-    error = ""
-    cambio_titulo = ""
-    cambio_estilo = ""
-    #poner el menu en el template
-    if titulo == "" :
-        titulo = u'Pagina de' + usuario.nombre
-    try:
-        hoteldeusu = usuario.hotel.all()
-        hoteldeusu = hoteldeusu.values ()
-        aux = 0
-        while (aux < len (hoteldeusu)):
-
-            hotel = hoteldeusu[aux]['nombre']
-
-
-    except ObjectDoesNotExist :
-        return HttpResponse('NO')
-
-    if request.user.is_authenticated ():
-        #pagina_estilo = StyleCSS.objects.get(usuario=recurso)
-        log += 'Hola' + request.user.username
-        log += '<br><a href = "/logaout">Salir</a>'
-
-    if recurso == request.user.username :
-<<<<<<< HEAD
-        cambio_titulo += '<form action ="" method= "POST">Cambiar titulo de la pagina<br><input type = "text" name = "Titulo"'
-=======
-        cambio_titulo += '<form action ="" method= "POST">Cambiar título de la pagina<br><input type = "text" name = "Titulo"'
->>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
-
-        cambio_titulo += '<input type = "submit" value = "Cambiar" > '
-        cambio_titulo += '</form>'
-
-        cambio_estilo += '<strong>Cambiar el estilo de la pagina </strong>'
-        cambio_estilo +='<form action = "" method = "POST" </form><label> Banner </label>'
-
-        cambio_estilo +='<select name = "banner"><option value = "" selected = selected > selecciona </option>'
-        #tipos de Banner
-    emplate = get_template('user.html')
-    context = RequestContext(request, {'alojamientos': listaHotel, 'usuario': u, 'titulo': titulo}) #le pasamos el objeto completo
-    return HttpResponse(template.render(context))"""
-
-
-#@csrf_exempt
-def paginaUsuario(request , usuario) :
+def paginaUsuario(request , usuario ) :
     u = usuario
-    print u
     listaHotel = []
     titulo = ""
     if u == "alojamientos":
@@ -327,29 +250,9 @@ def paginaUsuario(request , usuario) :
         c = Context ({'lista' : lista , 'estrellas':filtro_estrellas , 'subcategoria':filtro_subcategoria})
         return render_to_response('todos_alojamientos.html', c , context_instance = RequestContext(request))
     elif u == "about" :
-        cuerpo = ""
-        log = ""
-        titulo = "About this page"
-        inicio = '<a href = "/">Principal</a>'
 
 
-        cuerpo = ""
-        log = ""
-<<<<<<< HEAD
-        titulo = u"About. Informacion Alojamientos de Madrid"
-=======
-        titulo = u"About. Información Alojamientos de Madrid"
->>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
-        inicio = '<a href="/">Inicio</a>'
-        error = ''
-
-        #Logearse en ayuda
-
-        #plantilla = get_template('template.html')
-        c = Context({'contenido': cuerpo, 'titulo': titulo, 'inicio': inicio})
-        #renderizado = plantilla.render(c)
-        #return HttpResponse(renderizado)
-        return render_to_response('about.html', c , context_instance = RequestContext(request))
+        return render_to_response('about.html' , context_instance = RequestContext(request))
 
     elif u == "accounts/logout":
         auth.logout(request)
@@ -375,46 +278,37 @@ def paginaUsuario(request , usuario) :
             return HttpResponseRedirect('/accounts/invalid')
     elif u == "accounts/loggedin":
         return render_to_response('loggedin.html',{'full_name':request.user.username})
-<<<<<<< HEAD
     elif u == "accounts/invalid":
         return render_to_response('invalid_login.html')
-
-
-=======
->>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
-
-
+    elif u == "/comentario":
+        return HttpResponseRedirect("/comentario")
 
 
     else:
+        idusu = request.user.id
+        value = ""
+        tamanio = ""
+        tittle = ""
+        selected = HotelSelect.objects.all()
+
+        if request.method == 'POST':
+            color = request.POST.get('css',"")
+            tamanio = request.POST.get('size',"")
+            tittle = request.POST.get('titulo',"")
+            try:
+                user = StyleCSS.objects.get(usuario=usuario)
+                if value != "":
+                    user.color = value
+                if size != "":
+                    user.size = tamanio
+                if tittle != "":
+                    user.titulo_pagina = tittle;
+                    user.save()
+            except StyleCSS.DoesNotExist:
+                guardar = StyleCSS(usuario = usuario , titulo_pagina = titulo , color = value , size = tamanio)
 
 
-        try:
-            css = StyleCSS.objects.all()
-            #titulo  = CSS.titulo
-            titulo = ""
-            u = usuario
-        except StyleCSS.DoesNotExist :
-            usuario = User.objects.get(usuario = usuario)
-            u = usuario.usuario
-            titulo = ""
-        try:
-            hotelusu = HotelSelect.objects.all()
-            #for idHotel in hotelusu:
-<<<<<<< HEAD
-            #Imagees = Image.objects.filter(idHotel = alojamiento.alojamiento_id)
-            #if len(Imagees)>0:
-            #    list_aloj.append((alojamiento, Imagees[0].url))
-=======
-            #imagenes = Imagen.objects.filter(idHotel = alojamiento.alojamiento_id)
-            #if len(imagenes)>0:
-            #    list_aloj.append((alojamiento, imagenes[0].url))
->>>>>>> fce265cf8ea059b7410680cc0a6d14730943d014
-            #else:
-            #    list_aloj.append((alojamiento, ""))
-        except HotelSelect.DoesNotExist:
-            print "No existen favoritos..."
 
     #template = get_template('user.html')
-    context = {'alojamientos': listaHotel, 'usuario': u, 'titulo': titulo} #le pasamos el objeto completo
+    context = {'color':value,'size':tamanio,'titulo':tittle,'selecion': selected, 'usuario': u, 'titulo': titulo} #le pasamos el objeto completo
     return render_to_response ('user.html',context,RequestContext(request))
